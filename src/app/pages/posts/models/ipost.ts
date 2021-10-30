@@ -1,8 +1,10 @@
-interface Ipost {
+interface IPost {
   id?: string;
   title: string;
   description: string;
+  categoryId: string;
+  categoryName: string | undefined;
 }
 
-export type TPost = Ipost;
-export type TPosts = Ipost[];
+export type TPost = IPost;
+export type TPosts = IPost[];

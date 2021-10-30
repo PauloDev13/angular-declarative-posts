@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-md-12">
+    <h3>Lista de Categorias</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Título:</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let category of categories">
+          <td>{{ category.title }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

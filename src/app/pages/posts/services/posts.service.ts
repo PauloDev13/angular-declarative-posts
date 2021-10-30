@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs';
+import { map, mergeMap } from 'rxjs';
 
+import { TCategory } from '~/pages/categories/models/icategory';
+import { CategoriesService } from '~/pages/categories/services/categories.service';
 import { TPosts } from '~/pages/posts/models/ipost';
 
 import { environment } from '../../../../environments/environment.prod';
@@ -12,7 +14,10 @@ import { environment } from '../../../../environments/environment.prod';
 export class PostsService {
   URL = environment.FIREBASE_URL;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private categoriesService: CategoriesService,
+  ) {}
 
   getAllPosts() {
     return this.httpClient
@@ -28,5 +33,24 @@ export class PostsService {
           return posts;
         }),
       );
+  }
+
+  getPostsWithCategory() {
+    return this.getAllPosts().pipe(
+      mergeMap((posts) => {
+        return this.categoriesService.getCategories().pipe(
+          map((categories) => {
+            return posts.map((post) => {
+              return {
+                ...post,
+                categoryName: categories.find(
+                  (category: TCategory) => category.id === post.categoryId,
+                )?.title,
+              };
+            });
+          }),
+        );
+      }),
+    );
   }
 }
